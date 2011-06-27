@@ -39,6 +39,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
     end
 
+    desc "Upgrade all PEAR packages on the server"
+    task :upgrade_packages, :roles => :app do
+      run "#{pear_cmd} upgrade"
+      pear_channels.each do |channel|
+        run "#{pear_cmd} upgrade -c #{channel}"
+      end
+    end
+
     desc "Install PEAR packages"
     task :install_packages, :roles => :app do
       pear_packages.each do |package|
